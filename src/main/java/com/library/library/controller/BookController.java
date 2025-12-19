@@ -1,6 +1,6 @@
 package com.library.library.controller;
 
-import com.library.library.dto.BorrowRequest;
+import com.library.library.dto.*;
 import com.library.library.model.Book;
 import com.library.library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,8 @@ public class BookController {
     private BookService bookService;
 
     @PostMapping
-    public ResponseEntity<Book> addBook(@RequestParam Long authorId, @RequestParam String authorName, @RequestParam String title) {
-        Book book = bookService.addBook(authorId, authorName, title);
+    public ResponseEntity<Book> addBook(@RequestBody CreateBookRequest request) {
+        Book book = bookService.addBook(request.getAuthorIds(), request.getAuthorNames(), request.getTitle());
         return book != null ? ResponseEntity.ok(book) : ResponseEntity.badRequest().build();
     }
 
@@ -26,9 +26,14 @@ public class BookController {
         return book != null ? ResponseEntity.ok(book) : ResponseEntity.notFound().build();
     }
 
+    @GetMapping
+    public ResponseEntity<java.util.Collection<Book>> getAllBooks() {
+        return ResponseEntity.ok(bookService.getAllBooks().values());
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestParam Long authorId, @RequestParam String authorName, @RequestParam String title) {
-        Book updated = bookService.updateBook(id, authorId, authorName, title);
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody UpdateBookRequest request) {
+        Book updated = bookService.updateBook(id, request.getAuthorIds(), request.getAuthorNames(), request.getTitle());
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 

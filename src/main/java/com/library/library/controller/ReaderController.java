@@ -1,5 +1,7 @@
 package com.library.library.controller;
 
+import com.library.library.dto.CreateReaderRequest;
+import com.library.library.dto.UpdateReaderRequest;
 import com.library.library.model.Reader;
 import com.library.library.service.ReaderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +16,8 @@ public class ReaderController {
     private ReaderService readerService;
 
     @PostMapping
-    public ResponseEntity<Reader> addReader(@RequestParam String name) {
-        return ResponseEntity.ok(readerService.addReader(name));
+    public ResponseEntity<Reader> addReader(@RequestBody CreateReaderRequest request) {
+        return ResponseEntity.ok(readerService.addReader(request.getName()));
     }
 
     @GetMapping("/{id}")
@@ -24,9 +26,14 @@ public class ReaderController {
         return reader != null ? ResponseEntity.ok(reader) : ResponseEntity.notFound().build();
     }
 
+    @GetMapping
+    public ResponseEntity<java.util.Collection<Reader>> getAllReaders() {
+        return ResponseEntity.ok(readerService.getAllReaders().values());
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Reader> updateReader(@PathVariable Long id, @RequestParam String name) {
-        Reader updated = readerService.updateReader(id, name);
+    public ResponseEntity<Reader> updateReader(@PathVariable Long id, @RequestBody UpdateReaderRequest request) {
+        Reader updated = readerService.updateReader(id, request.getName());
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 

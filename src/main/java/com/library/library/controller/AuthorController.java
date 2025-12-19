@@ -1,5 +1,7 @@
 package com.library.library.controller;
 
+import com.library.library.dto.CreateAuthorRequest;
+import com.library.library.dto.UpdateAuthorRequest;
 import com.library.library.model.Author;
 import com.library.library.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +16,8 @@ public class AuthorController {
     private AuthorService authorService;
 
     @PostMapping
-    public ResponseEntity<Author> addAuthor(@RequestParam String name) {
-        return ResponseEntity.ok(authorService.addAuthor(name));
+    public ResponseEntity<Author> addAuthor(@RequestBody CreateAuthorRequest request) {
+        return ResponseEntity.ok(authorService.addAuthor(request.getName()));
     }
 
     @GetMapping("/{id}")
@@ -24,9 +26,14 @@ public class AuthorController {
         return author != null ? ResponseEntity.ok(author) : ResponseEntity.notFound().build();
     }
 
+    @GetMapping
+    public ResponseEntity<java.util.Collection<Author>> getAllAuthors() {
+        return ResponseEntity.ok(authorService.getAuthors().values());
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Author> updateAuthor(@PathVariable Long id, @RequestParam String name) {
-        Author updated = authorService.updateAuthor(id, name);
+    public ResponseEntity<Author> updateAuthor(@PathVariable Long id, @RequestBody UpdateAuthorRequest request) {
+        Author updated = authorService.updateAuthor(id, request.getName());
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 

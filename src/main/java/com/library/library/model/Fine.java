@@ -3,8 +3,7 @@ package com.library.library.model;
 import lombok.Data;
 
 @Data
-public class Fine
-{
+public class Fine {
     private Long id;
     private Long readerId;
     private Long bookId;

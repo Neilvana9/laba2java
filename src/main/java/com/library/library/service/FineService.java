@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class FineService {
-
     private Map<Long, Fine> fines = new HashMap<>();
     private AtomicLong idCounter = new AtomicLong(1);
 
@@ -26,11 +25,13 @@ public class FineService {
         return fines.get(id);
     }
 
-    public Fine updateFine(Long id, Fine updatedFine) {
-        if (fines.containsKey(id)) {
-            updatedFine.setId(id);
-            fines.put(id, updatedFine);
-            return updatedFine;
+    public Fine updateFine(Long id, Long readerId, Long bookId, double amount) {
+        Fine fine = fines.get(id);
+        if (fine != null) {
+            fine.setReaderId(readerId);
+            fine.setBookId(bookId);
+            fine.setAmount(amount);
+            return fine;
         }
         return null;
     }
@@ -39,10 +40,16 @@ public class FineService {
         fines.remove(id);
     }
 
-    public void markFineAsPaid(Long id) {
+    public Fine markFineAsPaid(Long id) {
         Fine fine = fines.get(id);
         if (fine != null) {
             fine.setPaid(true);
+            return fine;
         }
+        return null;
+    }
+
+    public Map<Long, Fine> getAllFines() {
+        return new HashMap<>(fines);
     }
 }

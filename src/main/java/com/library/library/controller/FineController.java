@@ -1,5 +1,7 @@
 package com.library.library.controller;
 
+import com.library.library.dto.CreateFineRequest;
+import com.library.library.dto.UpdateFineRequest;
 import com.library.library.model.Fine;
 import com.library.library.service.FineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +16,8 @@ public class FineController {
     private FineService fineService;
 
     @PostMapping
-    public ResponseEntity<Fine> addFine(@RequestParam Long readerId, @RequestParam Long bookId, @RequestParam double amount) {
-        Fine fine = fineService.addFine(readerId, bookId, amount);
+    public ResponseEntity<Fine> addFine(@RequestBody CreateFineRequest request) {
+        Fine fine = fineService.addFine(request.getReaderId(), request.getBookId(), request.getAmount());
         return fine != null ? ResponseEntity.ok(fine) : ResponseEntity.badRequest().build();
     }
 
@@ -25,16 +27,15 @@ public class FineController {
         return fine != null ? ResponseEntity.ok(fine) : ResponseEntity.notFound().build();
     }
 
+    @GetMapping
+    public ResponseEntity<java.util.Collection<Fine>> getAllFines() {
+        return ResponseEntity.ok(fineService.getAllFines().values());
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Fine> updateFine(@PathVariable Long id, @RequestParam Long readerId, @RequestParam Long bookId, @RequestParam double amount) {
-        Fine updated = fineService.updateFine(id, new Fine());
-        if (updated != null) {
-            updated.setReaderId(readerId);
-            updated.setBookId(bookId);
-            updated.setAmount(amount);
-            return ResponseEntity.ok(updated);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Fine> updateFine(@PathVariable Long id, @RequestBody UpdateFineRequest request) {
+        Fine updated = fineService.updateFine(id, request.getReaderId(), request.getBookId(), request.getAmount());
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
@@ -45,7 +46,7 @@ public class FineController {
 
     @PostMapping("/{id}/pay")
     public ResponseEntity<Fine> markFineAsPaid(@PathVariable Long id) {
-        fineService.markFineAsPaid(id);
-        return ResponseEntity.ok(fineService.getFine(id));
+        Fine fine = fineService.markFineAsPaid(id);
+        return fine != null ? ResponseEntity.ok(fine) : ResponseEntity.notFound().build();
     }
 }

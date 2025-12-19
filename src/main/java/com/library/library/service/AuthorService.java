@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class AuthorService {
-
     private Map<Long, Author> authors = new HashMap<>();
     private AtomicLong idCounter = new AtomicLong(1);
 
@@ -31,6 +30,10 @@ public class AuthorService {
             return author;
         }
         return null;
+    }
+
+    public Map<Long, Author> getAuthors() {
+        return new HashMap<>(authors);
     }
 
     public void deleteAuthor(Long id) {

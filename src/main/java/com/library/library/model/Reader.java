@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class Reader
-{
+public class Reader {
     private Long id;
     private String name;
     @JsonIgnore

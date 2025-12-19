@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class ReaderService {
-
     private Map<Long, Reader> readers = new HashMap<>();
     private AtomicLong idCounter = new AtomicLong(1);
 
@@ -31,6 +30,10 @@ public class ReaderService {
             return reader;
         }
         return null;
+    }
+
+    public Map<Long, Reader> getAllReaders() {
+        return new HashMap<>(readers);
     }
 
     public void deleteReader(Long id) {
