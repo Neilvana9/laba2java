@@ -1,8 +1,8 @@
 package com.library.library.controller;
 
 import com.library.library.model.Review;
-import com.library.library.repository.ReviewRepository;
 import com.library.library.service.ReviewService;
+import com.library.library.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @Autowired
-    private ReviewRepository reviewRepository; // Добавьте эту строку
+    private ReviewRepository reviewRepository;
 
     @PostMapping("/book")
     public ResponseEntity<Review> addBookReview(
@@ -60,7 +60,7 @@ public class ReviewController {
     @PostMapping("/{reviewId}/verify")
     public ResponseEntity<Review> verifyReview(@PathVariable Long reviewId) {
         reviewService.verifyReview(reviewId);
-        Review review = reviewRepository.findById(reviewId) // Теперь reviewRepository доступен
+        Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new RuntimeException("Review not found"));
         return ResponseEntity.ok(review);
     }

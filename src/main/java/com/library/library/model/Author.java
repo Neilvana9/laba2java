@@ -21,7 +21,7 @@ public class Author {
     private String name;
 
     @ManyToMany(mappedBy = "authors")
-    @JsonIgnore // Игнорируем это поле при сериализации
+    @JsonIgnore
     private List<Book> books = new ArrayList<>();
 
     private double averageRating = 0.0;

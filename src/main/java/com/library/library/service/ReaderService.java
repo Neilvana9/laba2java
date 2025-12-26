@@ -50,6 +50,6 @@ public class ReaderService {
     }
 
     public List<Book> getBorrowedBooksByReader(Long readerId) {
-        return bookRepository.findByCurrentReaderId(readerId); // Использует метод из BookRepository
+        return bookRepository.findByCurrentReaderId(readerId);
     }
 }

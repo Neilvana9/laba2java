@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-		"name": "Библиотечная система API",
+		"name": "Библиотека",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "12345678"
 	},
@@ -227,7 +227,7 @@
 					"response": []
 				},
 				{
-					"name": "Получить книги на руках у читателя",
+					"name": "Получить книги, взятые читателем",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -949,7 +949,7 @@
 			]
 		},
 		{
-			"name": "Тестовые сценарии",
+			"name": "Сценарные тесты",
 			"item": [
 				{
 					"name": "Полный цикл работы с книгой",

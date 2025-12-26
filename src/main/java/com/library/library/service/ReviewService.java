@@ -57,7 +57,6 @@ public class ReviewService {
 
         Review savedReview = reviewRepository.save(review);
 
-        // Обновляем средний рейтинг книги
         updateBookAverageRating(bookId);
 
         return savedReview;
@@ -77,7 +76,6 @@ public class ReviewService {
 
         Review savedReview = reviewRepository.save(review);
 
-        // Обновляем средний рейтинг автора
         updateAuthorAverageRating(authorId);
 
         return savedReview;

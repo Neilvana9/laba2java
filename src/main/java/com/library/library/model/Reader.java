@@ -21,6 +21,6 @@ public class Reader {
     private String name;
 
     @OneToMany(mappedBy = "currentReader")
-    @JsonIgnore // Игнорируем книги при сериализации читателя
+    @JsonIgnore
     private List<Book> borrowedBooks = new ArrayList<>();
 }

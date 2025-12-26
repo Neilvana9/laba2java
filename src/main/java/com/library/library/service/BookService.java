@@ -30,16 +30,6 @@ public class BookService {
     @Autowired
     private FineRepository fineRepository;
 
-    @Transactional(readOnly = true)
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
-    }
-
-    @Transactional(readOnly = true)
-    public Book getBook(Long id) {
-        return bookRepository.findById(id).orElse(null);
-    }
-
     public Book addBook(List<Long> authorIds, String title) {
         Book book = new Book();
         book.setTitle(title);
@@ -51,6 +41,11 @@ public class BookService {
 
         book.setAuthors(authors);
         return bookRepository.save(book);
+    }
+
+    @Transactional(readOnly = true)
+    public Book getBook(Long id) {
+        return bookRepository.findById(id).orElse(null);
     }
 
     public Book updateBook(Long id, List<Long> authorIds, String title) {
@@ -73,6 +68,11 @@ public class BookService {
         bookRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
+    }
+
     public Book borrowBook(Long bookId, Long readerId) {
         Optional<Book> bookOptional = bookRepository.findById(bookId);
         Optional<Reader> readerOptional = readerRepository.findById(readerId);
@@ -92,6 +92,7 @@ public class BookService {
         book.setCurrentReader(reader);
         book.setBorrowDate(LocalDate.now());
         book.setDueDate(LocalDate.now().plusDays(30));
+        book.setActualReturnDate(null);
         book.setBorrowCount(book.getBorrowCount() + 1);
 
         return bookRepository.save(book);
@@ -108,13 +109,20 @@ public class BookService {
             throw new RuntimeException("Book is not currently borrowed");
         }
 
-        LocalDate today = LocalDate.now();
-        if (today.isAfter(book.getDueDate())) {
-            long daysOverdue = ChronoUnit.DAYS.between(book.getDueDate(), today);
+        book.setActualReturnDate(LocalDate.now());
+
+        Reader reader = book.getCurrentReader();
+        if (reader != null) {
+            reader.getBorrowedBooks().remove(book);
+        }
+
+        if (book.getDueDate() != null && book.getActualReturnDate() != null &&
+                book.getActualReturnDate().isAfter(book.getDueDate())) {
+            long daysOverdue = ChronoUnit.DAYS.between(book.getDueDate(), book.getActualReturnDate());
             double fineAmount = daysOverdue * FINE_RATE_PER_DAY;
 
             Fine fine = new Fine();
-            fine.setReader(book.getCurrentReader());
+            fine.setReader(reader);
             fine.setBook(book);
             fine.setAmount(fineAmount);
             fine.setPaid(false);
@@ -124,8 +132,6 @@ public class BookService {
 
         book.setBorrowed(false);
         book.setCurrentReader(null);
-        book.setBorrowDate(null);
-        book.setDueDate(null);
 
         return bookRepository.save(book);
     }

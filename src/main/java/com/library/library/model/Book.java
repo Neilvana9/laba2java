@@ -31,11 +31,12 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "current_reader_id")
-    @JsonIgnore // Игнорируем reader при сериализации книги
+    @JsonIgnore
     private Reader currentReader;
 
     private LocalDate borrowDate;
     private LocalDate dueDate;
+    private LocalDate actualReturnDate;
     private boolean borrowed = false;
     private int borrowCount = 0;
 

@@ -21,7 +21,7 @@ public class Fine {
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
-    @JsonIgnore // Игнорируем книгу при сериализации штрафа
+    @JsonIgnore
     private Book book;
 
     @Column(nullable = false)

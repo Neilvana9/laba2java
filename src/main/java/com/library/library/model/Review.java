@@ -1,5 +1,6 @@
 package com.library.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,18 +22,20 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "book_id")
+    @JsonIgnore
     private Book book;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
+    @JsonIgnore
     private Author author;
 
     @Column(nullable = false)
-    private int rating; // Оценка от 1 до 5
+    private int rating;
 
     private String comment;
 
     private LocalDateTime reviewDate = LocalDateTime.now();
 
-    private boolean verified = false; // Проверен ли отзыв библиотекарем
+    private boolean verified = false;
 }

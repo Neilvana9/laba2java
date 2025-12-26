@@ -1,13 +1,12 @@
 package com.library.library.controller;
 
 import com.library.library.model.Book;
-import com.library.library.repository.BookRepository;
 import com.library.library.service.AnalyticsService;
+import com.library.library.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,15 +27,11 @@ public class RecommendationController {
 
     @GetMapping("/highly-rated")
     public ResponseEntity<List<Book>> getHighlyRatedBooks(@RequestParam(defaultValue = "10") int limit) {
-        return ResponseEntity.ok(analyticsService.getHighlyRatedBooks(limit));
+        return ResponseEntity.ok(bookRepository.findTopByOrderByAverageRatingDesc(limit));
     }
 
     @GetMapping("/analytics")
     public ResponseEntity<Map<String, Object>> getLibraryAnalytics() {
-        Map<String, Object> analytics = new HashMap<>();
-        analytics.put("averageReadingDuration", analyticsService.getAverageReadingDuration());
-        analytics.put("onTimeReturnPercentage", analyticsService.getOnTimeReturnPercentage());
-        analytics.put("topReaders", analyticsService.getTopReaders(5));
-        return ResponseEntity.ok(analytics);
+        return ResponseEntity.ok(analyticsService.getLibraryAnalytics());
     }
 }
